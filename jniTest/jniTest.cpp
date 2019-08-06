@@ -10,7 +10,6 @@ jobject g_obj = NULL;
 
 jclass m_class = NULL;
 jmethodID m_method = NULL;
-JNIEnv *m_jnienv;
 
 JNIEXPORT void JNICALL Java_sample_Controller_uartFromc
 (JNIEnv *env, jobject jniCallObj)
@@ -19,11 +18,10 @@ JNIEXPORT void JNICALL Java_sample_Controller_uartFromc
 	g_obj = env->NewGlobalRef(jniCallObj);
 
 	m_class = env->GetObjectClass(jniCallObj);
-	m_method = env->GetStaticMethodID(m_class,"print","()V");
-	m_jnienv = env;
+	m_method = env->GetStaticMethodID(m_class,"print","(C)V");
 
 
-	m_jnienv->CallStaticVoidMethod(m_class, m_method);
+	//m_jnienv->CallStaticVoidMethod(m_class, m_method);
 
 
 	CSerialPort *mySerialPort = new CSerialPort();

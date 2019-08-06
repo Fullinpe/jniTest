@@ -266,6 +266,22 @@ UINT WINAPI CSerialPort::ListenThread(void* pParam)
 {
 	JNIEnv *localEnv;
 	jclass cls;
+
+	if (g_jvm->AttachCurrentThread((void **)&localEnv, NULL) != JNI_OK) {
+		cout << "error1" << endl;
+		return NULL;
+	}
+
+	cls = localEnv->GetObjectClass(g_obj);
+	if (cls == NULL) {
+		cout << "error2"<<endl;
+	}
+
+
+
+
+
+
 	/** 得到本类的指针 */
 	CSerialPort *pSerialPort = reinterpret_cast<CSerialPort*>(pParam);
 
@@ -287,7 +303,9 @@ UINT WINAPI CSerialPort::ListenThread(void* pParam)
 			cRecved = 0x00;
 			if (pSerialPort->ReadChar(cRecved) == true)
 			{
-				Rx_handler(cRecved);
+
+				localEnv->CallStaticVoidMethod(cls, m_method, cRecved);
+				//Rx_handler(cRecved);
 				//std::stringstream  ss;
 				//int tm = cRecved;
 				//ss << std::hex << std::setw(2) << std::setfill('0') << tm;
